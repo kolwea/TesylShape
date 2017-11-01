@@ -21,7 +21,11 @@ public class TesylShape {
     private Timeline timeline;
     private KeyFrame keyframe;
     private TesylPoint[] points;
+<<<<<<< HEAD
     private Bound[] bounds;
+=======
+    private TesylBound[] bounds;
+>>>>>>> origin/master
     private AnchorPane vizPane;
     private final int pointCount = 10;
     private final double maxVelocity = 2.0, minVelocity = 0.5;
@@ -38,6 +42,7 @@ public class TesylShape {
     
     private void initialize(){
         points = new TesylPoint[pointCount];
+<<<<<<< HEAD
         bounds = new Bound[pointCount];
         faces = new TesylFace[4];
         for(int i =0; i< pointCount; i++){
@@ -59,6 +64,16 @@ public class TesylShape {
 //        faces[2] = new TesylFace(points[0],points[1], points[2], points[3]);
 //        faces[3] = new TesylFace(points[0],points[1], points[2], points[3]);
         vizPane.getChildren().addAll(faces[0].getBody(),faces[1].getBody());
+=======
+        for(int i =0; i< pointCount; i++){
+            TesylPoint hold = new TesylPoint(i);
+            TesylBound holdBound = new TesylBound(hold);
+            points[i] = hold;
+            vizPane.getChildren().addAll(hold.getBody());           
+            hold.setPosition(this.getRandomPosition(hold));
+            hold.setVelocity(this.getRandomVelocity());
+        }
+>>>>>>> origin/master
         setupTimeline();
     }
     
@@ -73,10 +88,14 @@ public class TesylShape {
     
     private void update(){
         for(int i = 0; i < pointCount ; i++){
+<<<<<<< HEAD
 //            points[i].update();
             bounds[i].update();
             faces[0].update();
             faces[1].update();
+=======
+            points[i].update(this.getBounds());
+>>>>>>> origin/master
         }
     }
     
