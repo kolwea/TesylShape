@@ -21,7 +21,7 @@ public class TesylShape {
     private Timeline timeline;
     private KeyFrame keyframe;
     private TesylPoint[] points;
-    private Bound[] bounds;
+    private TesylBound[] bounds;
     private AnchorPane vizPane;
     private final int pointCount = 10;
     private final double maxVelocity = 2.0, minVelocity = 0.5;
@@ -38,27 +38,14 @@ public class TesylShape {
     
     private void initialize(){
         points = new TesylPoint[pointCount];
-        bounds = new Bound[pointCount];
-        faces = new TesylFace[4];
         for(int i =0; i< pointCount; i++){
             TesylPoint hold = new TesylPoint(i);
-            Bound holdBound = new Bound(hold);
-            hold.setShape(this);
+            TesylBound holdBound = new TesylBound(hold);
             points[i] = hold;
-            bounds[i] = holdBound;
-            vizPane.getChildren().addAll(hold.getBody(),holdBound.getBody());            
+            vizPane.getChildren().addAll(hold.getBody());           
             hold.setPosition(this.getRandomPosition(hold));
             hold.setVelocity(this.getRandomVelocity());
         }
-        points[0].connect(points[1].getBody());
-        points[1].connect(points[2].getBody());
-        points[2].connect(points[3].getBody());
-        points[3].connect(points[0].getBody());
-        faces[0] = new TesylFace(points[0],points[1], points[2], points[3]);
-        faces[1] = new TesylFace(points[0],points[1], points[4], points[5]);
-//        faces[2] = new TesylFace(points[0],points[1], points[2], points[3]);
-//        faces[3] = new TesylFace(points[0],points[1], points[2], points[3]);
-        vizPane.getChildren().addAll(faces[0].getBody(),faces[1].getBody());
         setupTimeline();
     }
     
@@ -73,10 +60,7 @@ public class TesylShape {
     
     private void update(){
         for(int i = 0; i < pointCount ; i++){
-//            points[i].update();
-            bounds[i].update();
-            faces[0].update();
-            faces[1].update();
+            points[i].update(this.getBounds());
         }
     }
     
