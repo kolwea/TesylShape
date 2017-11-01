@@ -67,7 +67,6 @@ public class TesylShape {
 =======
         for(int i =0; i< pointCount; i++){
             TesylPoint hold = new TesylPoint(i);
-            TesylBound holdBound = new TesylBound(hold);
             points[i] = hold;
             vizPane.getChildren().addAll(hold.getBody());           
             hold.setPosition(this.getRandomPosition(hold));
