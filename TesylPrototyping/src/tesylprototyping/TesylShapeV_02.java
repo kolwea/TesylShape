@@ -28,6 +28,9 @@ public class TesylShapeV_02 {
     private KeyFrame keyframe;
     private Timeline timeline;
     
+    //////////////////////////
+    Tesyl_InnerBound test,test2;
+    
     public TesylShapeV_02(Pane pane){
       this.vizPane = pane;
     }
@@ -35,6 +38,8 @@ public class TesylShapeV_02 {
     /////////////////////////////////////////////INITIALIZATION FUNCTIONS////////////////////////////////////////////////    
     private void setupShape(){
         setupPoints();
+                testSequence();
+
         setupTimeline();
     }  
     
@@ -46,7 +51,7 @@ public class TesylShapeV_02 {
             points[i] = a;
             a.setRandomPosition(vizPane);
             a.setRandomVelocity();
-            vizPane.getChildren().add(a.getBody());
+            addToPane(a.getBody());
             i++;
         }
     }
@@ -84,6 +89,8 @@ public class TesylShapeV_02 {
     private void update(){
         for(TesylPoint a : points){
             a.update(getBounds());
+            test.update();
+            test2.update();
         }
     }
         
@@ -93,15 +100,32 @@ public class TesylShapeV_02 {
         
     }
     
+    private void addToPane(Node me){
+        vizPane.getChildren().addAll(me);
+    }
+    
     ///////////////////////////////////////////////TEST FUNCTIONS///////////////////////////////////////////////////////////
     
     private void testSequence(){
+        test = new Tesyl_InnerBound();
+        test.setBound(points[0], points[2]);
+        test.addConform(points[1]);        
+        test.addConform(points[3]);
+        this.addToPane(test.getBody());
+        
+        test2 = new Tesyl_InnerBound();
+        test2.setBound(points[1], points[3]);
+        test2.addConform(points[0]);
+        test2.addConform(points[2]);
+        this.addToPane(test2.getBody());
+    }
+    
+    private void testUpdate(){
         
     }
     
-    private void connectNodes(TesylPoint uno, TesylPoint dos){
-        uno.connect(dos);
-    }
+    
+    
     
     
 

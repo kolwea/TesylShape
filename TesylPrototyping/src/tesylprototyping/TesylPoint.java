@@ -44,8 +44,8 @@ public class TesylPoint {
         bodyWidth = 10.0;
         strokeWidth = 3.0;
         bodyColor = Color.CORAL;
-        maxVelocity = 2.0;
-        minVelocity = 0.5;
+        maxVelocity = 1.0;
+        minVelocity = 1.0;
     }
     
     private void setupBody(){        
@@ -99,7 +99,7 @@ public class TesylPoint {
         getInBound(bounds);
         pos = pos.add(velocity);
         body.setCenterX(pos.x);
-        body.setCenterY(pos.y);        
+        body.setCenterY(pos.y);  
     }
         
     protected void connect(TesylPoint connie){
@@ -131,20 +131,27 @@ public class TesylPoint {
             this.getBody().toFront();
             n2.toFront();
             this.body.toFront();
-
         }
+    }
+    
+    protected void reverseVelocity_X(){
+        velocity.x = -velocity.x;
+    }
+        
+    protected void reverseVelocity_Y(){
+        velocity.y = -velocity.y;
     }
     
 ////////////////////////////////////////////////HELPER FUNCTIONS//////////////////////////////////////////////////////////   
     private void getInBound(Vector bounds){
         if(this.pos.x+body.getRadius() > bounds.x)
-            velocity.x = -velocity.x;
+            this.reverseVelocity_X();
         if(this.pos.y+body.getRadius() > bounds.y)
-            velocity.y = velocity.y*-1;
+            this.reverseVelocity_Y();
         if(this.pos.x-body.getRadius() < 0)
-            velocity.x = -velocity.x;
+            this.reverseVelocity_X();
         if(this.pos.y-body.getRadius() < 0)
-            velocity.y = velocity.y*-1;
+            this.reverseVelocity_Y();
     }
     
     private double getRandomX(Pane vizPane){
@@ -175,6 +182,8 @@ public class TesylPoint {
             done = -done;
         return done;
     }
+    
+    
     
     
     
