@@ -34,8 +34,8 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO        
-        TesylShapeV_02 shape = new TesylShapeV_02(vizPane);
-        shape.createTesyl();
+        TesylShape shape = new TesylShape(vizPane);
+        
     }    
     
 }
