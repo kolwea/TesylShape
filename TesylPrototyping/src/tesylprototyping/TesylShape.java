@@ -23,7 +23,7 @@ public class TesylShape {
     private TesylPoint[] points;
     private TesylBound[] bounds;
     private AnchorPane vizPane;
-    private final int pointCount = 10;
+    private final int pointCount = 1;
     private final double maxVelocity = 2.0, minVelocity = 0.5;
 
     public TesylShape() {
@@ -43,10 +43,10 @@ public class TesylShape {
             points[i] = hold;
             vizPane.getChildren().addAll(hold.getBody());
         }
-        StaticBound test = new StaticBound();
-        test.setEndPoints(new Vector(0,150), new Vector(150,150));
-        bounds[0] = test;
-        vizPane.getChildren().add(test.bound);
+        StaticBound tester = new StaticBound();
+        tester.setEndPoints(new Vector(0, 0), new Vector(300, 300));
+        bounds[0] = tester;
+        vizPane.getChildren().add(tester.bound);
         setupTimeline();
     }
 
@@ -60,14 +60,9 @@ public class TesylShape {
     }
 
     private void update() {
-//        for (TesylBound curr : bounds) {
-//            curr.updateState();
-//        }
         for (TesylPoint point : points) {
-//          for(TesylBound bound : bounds){
-//              bound.checkIntersection(point);
-//          }
-          point.update();
+            bounds[0].checkIntersection(point);
+            point.update();
         }
     }
 

@@ -25,7 +25,7 @@ public class TesylPoint {
 
     //Dynamic Variables////////////////////////////////////
     private Vector position, velocity;
-    private double velocityAngle, acceleration;
+    private double velocityAngle, acceleration, lastAngle;
 
     //Static Variables////////////////////////////////////
     private static double maxVelocity, minVelocity;
@@ -82,27 +82,31 @@ public class TesylPoint {
     }
 
 ////////////////////////////////////////////////CLASS FUNCTIONS/////////////////////////////////////////////////////
-    protected Circle getBody(){
+    protected Circle getBody() {
         return this.body;
     }
-    
-    protected Vector getPosition(){
+
+    protected Vector getPosition() {
         return this.position;
     }
-    
-    protected double getAngle(){
+
+    protected int getIndex() {
+        return this.index;
+    }
+
+    protected double getAngle() {
         return this.velocityAngle;
     }
-    
-    protected void setAngle(double that){
+
+    protected void setAngle(double that) {
         this.velocityAngle = that;
     }
-    
-    protected void initialize_Random(){
+
+    protected void initialize_Random() {
         setRandomPosition();
         setRandomVelocity();
     }
-    
+
     protected void setRandomPosition() {
         position = new Vector(parent.getRandomX(this), parent.getRandomY(this));
     }
@@ -114,7 +118,11 @@ public class TesylPoint {
     }
 
     protected void update() {
-        velocity = new Vector(this.getAngleVelocityX(this.velocityAngle),this.getAngleVelocityY(this.velocityAngle));
+        if (velocityAngle != lastAngle) {
+            velocity = new Vector(getAngleVelocityX(velocityAngle), getAngleVelocityY(velocityAngle));
+            System.out.println("Index " + index + " changed from " + lastAngle + " to " + velocityAngle);
+            lastAngle = velocityAngle;
+        }
         position = position.add(velocity);
         this.updateBody();
     }
@@ -155,7 +163,6 @@ public class TesylPoint {
 //        Vector velo = new Vector(getAngleVelocityX(angle),getAngleVelocityY(angle));
 //        return velo;
 //    }
-
     private double getAngleVelocityX(double x) {
         double angle;
         if (x > 180) {

@@ -28,18 +28,21 @@ public class StaticBound extends TesylBound {
         slope = (y1 - y2) / (x1 - x2);
         intercept = y1 - (slope * x1);
         angle = Math.toDegrees(Math.atan(slope));
+        System.out.println("Line angle: " + angle);
+        createBind();
     }
 
     @Override
-    protected void updateState() {
+    protected void updateState(){
+        
     }
 
     @Override
     protected void createBind() {
-        bound.setStartX(start.x);
-        bound.setStartY(start.y);
-        bound.setEndX(end.x);
-        bound.setEndY(end.y);
+        bound.setStartX(end.x);
+        bound.setStartY(end.y);
+        bound.setEndX(start.x);
+        bound.setEndY(start.y);
     }
     
     

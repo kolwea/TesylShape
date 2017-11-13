@@ -5,9 +5,6 @@
  */
 package tesylprototyping;
 
-import java.util.ArrayList;
-import javafx.beans.binding.Bindings;
-import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -44,7 +41,8 @@ public abstract class TesylBound {
     protected abstract void createBind();
 
     protected void checkIntersection(TesylPoint curr) {
-        if (bound.intersects(curr.getBody().getBoundsInParent())) {
+        if (bound.intersects(curr.getBody().getBoundsInParent())){
+            System.out.println("Hit: " + curr.getIndex());
             reflectPoint(curr);
         }
     }
@@ -57,10 +55,10 @@ public abstract class TesylBound {
 
     private void reflectPoint(TesylPoint curr){
         double pointAngle = curr.getAngle();
-        if(pointAngle >= this.angle)
-            curr.setAngle(pointAngle - this.angle);
+        if(pointAngle >= angle)
+            curr.setAngle(pointAngle - angle);
         else
-            curr.setAngle(this.angle - pointAngle);
+            curr.setAngle(angle - pointAngle);
     }   
     
 
