@@ -27,11 +27,12 @@ public abstract class Bound {
         Shape intersect = Shape.intersect(body, point.getBody());
         if (intersect.getBoundsInLocal().getWidth() != -1) {
             collisionDetected = true;
-            System.out.println("did it");
         }
         
         return collisionDetected;
     }
+    
+    protected abstract void updateState();
     
     
 }

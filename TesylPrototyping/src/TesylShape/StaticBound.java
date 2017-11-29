@@ -15,25 +15,34 @@ import javafx.scene.shape.Shape;
  */
 public class StaticBound extends Bound {
 
-    private double angle = 25;
+    private double angle;
     private Vector start, end;
-    
+
     protected StaticBound(Vector start, Vector end) {
         super();
         this.start = start;
         this.end = end;
         setup();
+        updateState();
     }
 
     @Override
     protected void applyBound(Point point) {
-        double x,y;
-        
+        double x, y;
         x = point.getAngle() - angle;
         y = angle - x;
-        if(y > 360)
+        if (y <= 0) {
+            y += 360;
+        }
+        if (y > 360) {
             y -= 360;
-        point.setVelocity(Vector.angleToVector(y));
+        }
+        point.setVelocity(y);
+    }
+
+    @Override
+    protected Shape getBody() {
+        return this.body;
     }
 
     private void setup() {
@@ -48,7 +57,44 @@ public class StaticBound extends Bound {
     }
 
     @Override
-    protected Shape getBody() {
-        return this.body;
+    protected void updateState() {
+        double distStartO = start.distance(new Vector(0, 0));
+        double distEndO = end.distance(new Vector(0, 0));
+        double distStartE = start.distance(new Vector(500, 500));
+        double distEndE = end.distance(new Vector(500, 500));
+        Vector head, tail;
+        if (distStartO + distEndO <= distStartE + distEndE) {
+            if (distStartO < distEndO) {
+                head = start;
+                tail = end;
+            } else {
+                head = end;
+                tail = start;
+            }
+        } else {
+            if (distStartE > distEndE) {
+                head = start;
+                tail = end;
+            } else {
+                head = end;
+                tail = start;
+            }
+        }
+
+        double deltaX = head.x - tail.x;
+        double deltaY = -head.y - (-tail.y);
+        double rad = Math.atan2(deltaY, deltaX);
+
+        double deg = rad * (180 / Math.PI);
+
+        if (deg <= 0) {
+            deg += 360;
+        } else if (deg > 360) {
+            deg -= 360;
+        }
+        angle = deg;
+        System.out.println(angle);
+
     }
+
 }

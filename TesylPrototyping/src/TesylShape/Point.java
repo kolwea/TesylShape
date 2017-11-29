@@ -44,6 +44,7 @@ public class Point {
     }
     
     protected void setVelocity(double angle){
+        this.angle = angle;
         this.velocity = Vector.angleToVector(angle);
     }
     
@@ -70,9 +71,9 @@ public class Point {
     
     private void setup(){
         this.body = new Circle();
-        this.setPosition(new Vector(0,250));
+        this.setPosition(new Vector(500/2,500/2));
         this.body.setRadius(10.0);
-        this.angle = 0;
+        this.angle = Math.random()*360;
         this.velocity = Vector.angleToVector(angle);
     }
     
