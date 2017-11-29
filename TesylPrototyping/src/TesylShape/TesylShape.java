@@ -12,6 +12,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import tesylprototyping.TesylPoint;
 
@@ -21,19 +22,21 @@ import tesylprototyping.TesylPoint;
  */
 public class TesylShape {
 
-    private Pane rootPane;
+    private StackPane rootPane;
     private Timeline timeline;
     private KeyFrame keyframe;
 
     private ArrayList<Point> points;
     private ArrayList<Bound> bounds;
+    
+    private Face face;
 
     private final double POINT_COUNT = 5;
     private final double MIN_SPEED = 0; //Multiplier to speed - 1.0 equivilent 100% ;
     private final double MAX_SPEED = 1.0;
 
     public TesylShape() {
-        rootPane = new Pane();
+        rootPane = new StackPane();
         rootPane.setMinSize(500, 500);
         setup();
     }
@@ -52,19 +55,14 @@ public class TesylShape {
     }
 
     private void update() {
-        for (Point point : points) {
-            point.update();
-            for (Bound curr : bounds) {
-                if (curr.checkBound(point)) {
-                    curr.applyBound(point);
-                }
-            }
-        }
+        face.update();
     }
 
     private void setup() {
-        setupPoints();
-        setupBounds();
+//        setupPoints();
+//        setupBounds();
+        face = new Face();
+        rootPane.getChildren().add(face.face);
         setupTimeline();
     }
 
@@ -89,12 +87,12 @@ public class TesylShape {
         bounds.add(left);
         bounds.add(right);
         bounds.add(bottom);
-        
-        DynamicBound one = new DynamicBound(points.get(0), points.get(1));
-        DynamicBound two = new DynamicBound(points.get(2),points.get(3));
-        
-        bounds.add(one);
-        bounds.add(two);
+
+//        DynamicBound one = new DynamicBound(points.get(0),Orientation.HORIZONTAL);
+//        DynamicBound two = new DynamicBound(points.get(2),Orientation.HORIZONTAL);
+
+//        bounds.add(one);
+//        bounds.add(two);
 
         rootPane.getChildren().add(top.getBody());
         rootPane.getChildren().add(left.getBody());
