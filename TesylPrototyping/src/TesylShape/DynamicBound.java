@@ -22,18 +22,27 @@ public class DynamicBound extends Bound {
     private Vector start, end;
     private Point pOne, pTwo;
     private double angle;
+    private Line body;
 
-    protected DynamicBound(Point start, Point end){
+    protected DynamicBound(Point start, Point end) {
         this.pOne = start;
-        this.pTwo  = end;
+        this.pTwo = end;
         this.start = start.getPosition();
         this.end = end.getPosition();
         setup();
     }
-    
+
     @Override
     protected boolean checkBound(Point point) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        boolean collisionDetected = false;
+        if (!point.equals(pOne) && !point.equals(pTwo)) {
+            this.updateState();
+            Shape intersect = Shape.intersect(body, point.getBody());
+            if (intersect.getBoundsInLocal().getWidth() != -1) {
+                collisionDetected = true;
+            }
+        }
+        return collisionDetected;
     }
 
     @Override
@@ -47,9 +56,9 @@ public class DynamicBound extends Bound {
         if (y > 360) {
             y -= 360;
         }
-        System.out.println(y);
 
-        point.setVelocity(Vector.angleToVector(y));    }
+        point.setVelocity(y);
+    }
 
     @Override
     protected Shape getBody() {
@@ -58,35 +67,40 @@ public class DynamicBound extends Bound {
 
     @Override
     protected void updateState() {
-        start = pOne.getPosition();
-        end = pTwo.getPosition();
-
-        double distStart = start.distance(new Vector(0, 0));
-        double distEnd = end.distance(new Vector(0, 0));
+        double distStartO = start.distance(new Vector(0, 0));
+        double distEndO = end.distance(new Vector(0, 0));
+        double distStartE = start.distance(new Vector(500, 500));
+        double distEndE = end.distance(new Vector(500, 500));
         Vector head, tail;
-        if (distStart > distEnd) {
-            head = start;
-            tail = end;
-        } else {
-            head = end;
-            tail = start;
-        }
-
-        double deltaX = tail.x - head.x;
-        double deltaY = -tail.y - (-head.y);
+//        if (distStartO + distEndO <= distStartE + distEndE) {
+            if (distStartO < distEndO) {
+                head = start;
+                tail = end;
+            } else {
+                head = end;
+                tail = start;
+            }
+//        } else {
+//            if (distStartE > distEndE) {
+//                head = start;
+//                tail = end;
+//            } else {
+//                head = end;
+//                tail = start;
+//            }
+//        }
+        double deltaX = head.x - tail.x;
+        double deltaY = -head.y - (-tail.y);
         double rad = Math.atan2(deltaY, deltaX);
 
         double deg = rad * (180 / Math.PI);
-        System.out.println(angle);
 
         if (deg <= 0) {
             deg += 360;
-        }
-        if (deg > 360) {
+        } else if (deg > 360) {
             deg -= 360;
         }
         angle = deg;
-
     }
 
     private void setup() {
@@ -116,7 +130,6 @@ public class DynamicBound extends Bound {
                 return b.getMinY() + b.getHeight() / 2;
             }, pTwo.getBody().boundsInParentProperty()));
             parent.getChildren().add(body);
-            
             body.toBack();
         }
         body.setStrokeWidth(2.0);

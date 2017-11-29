@@ -17,6 +17,7 @@ public class StaticBound extends Bound {
 
     private double angle;
     private Vector start, end;
+    private Line body;
 
     protected StaticBound(Vector start, Vector end) {
         super();
@@ -60,25 +61,14 @@ public class StaticBound extends Bound {
     protected void updateState() {
         double distStartO = start.distance(new Vector(0, 0));
         double distEndO = end.distance(new Vector(0, 0));
-        double distStartE = start.distance(new Vector(500, 500));
-        double distEndE = end.distance(new Vector(500, 500));
+
         Vector head, tail;
-        if (distStartO + distEndO <= distStartE + distEndE) {
-            if (distStartO < distEndO) {
-                head = start;
-                tail = end;
-            } else {
-                head = end;
-                tail = start;
-            }
+        if (distStartO < distEndO) {
+            head = start;
+            tail = end;
         } else {
-            if (distStartE > distEndE) {
-                head = start;
-                tail = end;
-            } else {
-                head = end;
-                tail = start;
-            }
+            head = end;
+            tail = start;
         }
 
         double deltaX = head.x - tail.x;
@@ -93,8 +83,17 @@ public class StaticBound extends Bound {
             deg -= 360;
         }
         angle = deg;
-        System.out.println(angle);
+    }
 
+    @Override
+    protected boolean checkBound(Point point) {
+        boolean collisionDetected = false;
+        Shape intersect = Shape.intersect(body, point.getBody());
+        if (intersect.getBoundsInLocal().getWidth() != -1) {
+            collisionDetected = true;
+        }
+
+        return collisionDetected;
     }
 
 }

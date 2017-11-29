@@ -89,11 +89,19 @@ public class TesylShape {
         bounds.add(left);
         bounds.add(right);
         bounds.add(bottom);
+        
+        DynamicBound one = new DynamicBound(points.get(0), points.get(1));
+        DynamicBound two = new DynamicBound(points.get(2),points.get(3));
+        
+        bounds.add(one);
+        bounds.add(two);
 
         rootPane.getChildren().add(top.getBody());
         rootPane.getChildren().add(left.getBody());
         rootPane.getChildren().add(right.getBody());
         rootPane.getChildren().add(bottom.getBody());
+//        rootPane.getChildren().add(one.getBody());
+//        rootPane.getChildren().add(two.getBody());
     }
 
     protected Vector getRandomPositon() {

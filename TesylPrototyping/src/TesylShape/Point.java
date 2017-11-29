@@ -35,10 +35,6 @@ public class Point {
         return this.position;
     }
     
-    protected void setVelocity(Vector velo){
-        this.velocity = velo;
-    }
-    
     protected Vector getVelocity(){
         return this.velocity;
     }

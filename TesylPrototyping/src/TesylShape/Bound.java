@@ -13,7 +13,6 @@ import javafx.scene.shape.Shape;
  * @author Kolbe
  */
 public abstract class Bound {
-    protected Line body;
     
     protected Bound(){
     }
@@ -22,15 +21,7 @@ public abstract class Bound {
     
     protected abstract Shape getBody();
     
-    protected boolean checkBound(Point point) {
-        boolean collisionDetected = false;
-        Shape intersect = Shape.intersect(body, point.getBody());
-        if (intersect.getBoundsInLocal().getWidth() != -1) {
-            collisionDetected = true;
-        }
-        
-        return collisionDetected;
-    }
+    protected abstract boolean checkBound(Point point);
     
     protected abstract void updateState();
     
