@@ -44,7 +44,7 @@ public class Point {
         if (reuptake == 0) {
             this.angle = angle;
             this.velocity = Vector.angleToVector(angle);
-            reuptake = 200;
+            reuptake = 100;
         }
     }
 
