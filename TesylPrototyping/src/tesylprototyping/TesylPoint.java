@@ -18,166 +18,193 @@ import javafx.scene.shape.Line;
  * @author Kolbe
  */
 public class TesylPoint {
-    private Vector pos;
-    private Vector velocity;
-    private Circle body;
+
+    //Initialized Variables////////////////////////////////
     private int index;
-    private double bodyWidth;
-    private double strokeWidth;
-    private Color bodyColor;    
-    private double maxVelocity, minVelocity;
+    private TesylShape parent;
 
-    
+    //Dynamic Variables////////////////////////////////////
+    private Vector position, velocity;
+    private double velocityAngle, acceleration, lastAngle;
 
-    public TesylPoint(int index){
+    //Static Variables////////////////////////////////////
+    private static double maxVelocity, minVelocity;
+
+    //Visual Body Variables///////////////////////////////
+    private Circle body;
+    private double bodyWidth, strokeWidth;
+    private Color bodyColor;
+
+    //Default Values/////////////////////////////////////
+    private double dBodyWidth = 10.0;
+    private double dStrokeWidth = 3.0;
+    private double dAcceleration = 1.0;
+    private Color dColor = Color.CORAL;
+
+    public TesylPoint(TesylShape pap, int index) {
+        this.parent = pap;
         initialize(index);
     }
-/////////////////////////////////////////////INITIALIZATION FUNCTIONS//////////////////////////////////////////////////
-    private void initialize(int index){
+/////////////////////////////////////////////INITIALIZATION FUNCTIONS//////////////////////////////////////////////
+
+    private void initialize(int index) {
         this.index = index;
-        setupInitialValues();
+        setupDefaultValues();
         setupBody();
         setupVelocity();
     }
-    
-    private void setupInitialValues(){
-        bodyWidth = 10.0;
-        strokeWidth = 3.0;
-        bodyColor = Color.CORAL;
-        maxVelocity = 2.0;
-        minVelocity = 0.5;
+
+    private void setupDefaultValues() {
+        bodyWidth = dBodyWidth;
+        strokeWidth = dStrokeWidth;
+        bodyColor = dColor;
+        acceleration = dAcceleration;
     }
-    
-    private void setupBody(){        
+
+    private void setupBody() {
         body = new Circle();
         body.setFill(bodyColor);
         body.setRadius(bodyWidth);
-        pos = new Vector(150.0,150.0);
-        body.setCenterX(pos.x);
-        body.setCenterY(pos.y);
+        position = new Vector(150.0, 150.0);
+        body.setCenterX(position.x);
+        body.setCenterY(position.y);
     }
-    
-    private void setupVelocity(){
+
+    private void updateBody() {
+        body.setFill(bodyColor);
+        body.setRadius(bodyWidth);
+        body.setCenterX(position.x);
+        body.setCenterY(position.y);
+    }
+
+    private void setupVelocity() {
         velocity = new Vector(1.0, 1.0);
     }
-    
+
 ////////////////////////////////////////////////CLASS FUNCTIONS/////////////////////////////////////////////////////
-    
-    protected Vector getPosition(){
-        return this.pos;
-    }
-        
-    protected void setPosition(Vector pos){
-        this.pos = pos;
-    }
-            
-    protected Circle getBody(){
+    protected Circle getBody() {
         return this.body;
     }
-    
-    protected void setBody(Circle bod){
-        this.body = bod;
+
+    protected Vector getPosition() {
+        return this.position;
     }
-    
-    protected void setVelocity(Vector velo){
-        this.velocity = velo;
+
+    protected int getIndex() {
+        return this.index;
     }
-    
-    protected Vector getVelocity(){
-        return this.velocity;
+
+    protected double getAngle() {
+        return this.velocityAngle;
     }
-        
-    protected void setRandomPosition(Pane pane){
-        pos =  new Vector(this.getRandomX(pane),this.getRandomY(pane));
+
+    protected void setAngle(double that) {
+        this.velocityAngle = that;
     }
-        
-    protected void setRandomVelocity(){
-        velocity = new Vector(randomVelocity(),randomVelocity());
+
+    protected void initialize_Random() {
+        setRandomPosition();
+        setRandomVelocity();
     }
-    
-    protected void update(Vector bounds){
-        getInBound(bounds);
-        pos = pos.add(velocity);
-        body.setCenterX(pos.x);
-        body.setCenterY(pos.y);        
+
+    protected void setRandomPosition() {
+        position = new Vector(parent.getRandomX(this), parent.getRandomY(this));
     }
-        
-    protected void connect(TesylPoint connie){
-        Node n2 = connie.getBody();
-        if(this.body.getParent() == null){
-            System.out.println("Tis null");
+
+    protected void setRandomVelocity() {
+        velocityAngle = Math.random() * 360;
+        System.out.println("Angle: " + velocityAngle);
+
+    }
+
+    protected void update() {
+        if (velocityAngle != lastAngle) {
+            velocity = new Vector(getAngleVelocityX(velocityAngle), getAngleVelocityY(velocityAngle));
+            System.out.println("Index " + index + " changed from " + lastAngle + " to " + velocityAngle);
+            lastAngle = velocityAngle;
         }
-        else{
+        position = position.add(velocity);
+        this.updateBody();
+    }
+
+    protected void connect(TesylPoint connie) {
+        Node n2 = connie.getBody();
+        if (this.body.getParent() == null) {
+            System.out.println("Tis null");
+        } else {
             Pane parent = (Pane) this.body.getParent();
             Line line = new Line();
             line.setStrokeWidth(strokeWidth);
             line.startXProperty().bind(Bindings.createDoubleBinding(() -> {
                 Bounds b = this.body.getBoundsInParent();
-                return b.getMinX() + b.getWidth() / 2 ;
+                return b.getMinX() + b.getWidth() / 2;
             }, this.body.boundsInParentProperty()));
             line.startYProperty().bind(Bindings.createDoubleBinding(() -> {
                 Bounds b = this.body.getBoundsInParent();
-                return b.getMinY() + b.getHeight() / 2 ;
+                return b.getMinY() + b.getHeight() / 2;
             }, this.body.boundsInParentProperty()));
             line.endXProperty().bind(Bindings.createDoubleBinding(() -> {
                 Bounds b = n2.getBoundsInParent();
-                return b.getMinX() + b.getWidth() / 2 ;
+                return b.getMinX() + b.getWidth() / 2;
             }, n2.boundsInParentProperty()));
             line.endYProperty().bind(Bindings.createDoubleBinding(() -> {
                 Bounds b = n2.getBoundsInParent();
-                return b.getMinY() + b.getHeight() / 2 ;
+                return b.getMinY() + b.getHeight() / 2;
             }, n2.boundsInParentProperty()));
             parent.getChildren().add(line);
             this.getBody().toFront();
             n2.toFront();
             this.body.toFront();
+        }
+    }
 
+////////////////////////////////////////////////HELPER FUNCTIONS/////////////////////////////////////////////////////  
+//    private Vector getRandomVelocity() {
+//        Vector velo = new Vector(getAngleVelocityX(angle),getAngleVelocityY(angle));
+//        return velo;
+//    }
+    private double getAngleVelocityX(double x) {
+        double angle;
+        if (x > 180) {
+            angle = mapXOver(x);
+        } else {
+            angle = x;
         }
-    }
-    
-////////////////////////////////////////////////HELPER FUNCTIONS//////////////////////////////////////////////////////////   
-    private void getInBound(Vector bounds){
-        if(this.pos.x+body.getRadius() > bounds.x)
-            velocity.x = -velocity.x;
-        if(this.pos.y+body.getRadius() > bounds.y)
-            velocity.y = velocity.y*-1;
-        if(this.pos.x-body.getRadius() < 0)
-            velocity.x = -velocity.x;
-        if(this.pos.y-body.getRadius() < 0)
-            velocity.y = velocity.y*-1;
-    }
-    
-    private double getRandomX(Pane vizPane){
-        Double radius = body.getRadius();
-        double width = vizPane.getPrefWidth();
-        double randomNum = (Math.random() * width);
-        if(randomNum < 0 + radius || randomNum > width - radius){
-            randomNum = getRandomX(vizPane);
-        }
-        return randomNum;
-    }
-       
-    private double getRandomY(Pane vizPane){
-        Double radius = body.getRadius();
-        double height = vizPane.getPrefHeight();
-        double randomNum = (Math.random() * height);
-        if(randomNum < 0 + radius || randomNum > height - radius){
-            randomNum = getRandomY(vizPane);
-        }
-        return randomNum;
-    }
-    
-    private double randomVelocity(){
-        double done;
-        double flip = Math.random()*10 - 5;
-        done = Math.random() * maxVelocity + minVelocity;
-        if(flip <= 0)
-            done = -done;
+        double inMin = 0, inMax = 180, outMin = 1.000, outMax = -1.000;
+        double done = (double) (outMin + ((outMax - outMin) / (inMax - inMin)) * (angle - inMin));
         return done;
     }
-    
-    
-    
-    
+
+    private double mapXOver(double x) {
+        double inMin = 180, inMax = 360, outMin = 180, outMax = 0;
+        double done = (double) (outMin + ((outMax - outMin) / (inMax - inMin)) * (x - inMin));
+        return done;
+    }
+
+    private double getAngleVelocityY(double x) {
+        double angle;
+        if (x > 270) {
+            angle = mapYHigh(x);
+        } else if (x < 90) {
+            angle = mapYLow(x);
+        } else {
+            angle = x;
+        }
+        double inMin = 90, inMax = 270, outMin = -1.000, outMax = 1.000;
+        double done = (double) (outMin + ((outMax - outMin) / (inMax - inMin)) * (angle - inMin));
+        return done;
+    }
+
+    private double mapYLow(double x) {
+        double inMin = 0, inMax = 90, outMin = 180, outMax = 90;
+        double done = (double) (outMin + ((outMax - outMin) / (inMax - inMin)) * (x - inMin));
+        return done;
+    }
+
+    private double mapYHigh(double x) {
+        double inMin = 270, inMax = 360, outMin = 270, outMax = 180;
+        double done = (double) (outMin + ((outMax - outMin) / (inMax - inMin)) * (x - inMin));
+        return done;
+    }
 
 }
