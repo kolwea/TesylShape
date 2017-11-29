@@ -1,4 +1,4 @@
-package tesylprototyping;
+package TesylShape;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,7 +22,6 @@ public class TesylPrototyping extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
