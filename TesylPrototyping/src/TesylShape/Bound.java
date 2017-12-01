@@ -25,5 +25,6 @@ public abstract class Bound {
     
     protected abstract void updateState();
     
+    protected abstract void update();
     
 }

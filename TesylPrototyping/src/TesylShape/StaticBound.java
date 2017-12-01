@@ -43,7 +43,7 @@ public class StaticBound extends Bound {
         }
         point.reuptake = 0; 
         point.setVelocity(y);
-        point.reuptake = 0;
+
         }
     }
 
@@ -114,6 +114,10 @@ public class StaticBound extends Bound {
 
 //        body.setStroke(Paint.valueOf(Color.pink.toString()));
         body.setStrokeWidth(2.0);
+    }
+
+    @Override
+    protected void update() {
     }
 
 }

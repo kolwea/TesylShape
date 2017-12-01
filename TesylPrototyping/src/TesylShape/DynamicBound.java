@@ -28,25 +28,12 @@ public class DynamicBound extends Bound {
     private Orientation dir;
     private int minMax;
 
-    protected DynamicBound(Point one, Point two, Orientation bind) {
+    protected DynamicBound(Point one, Point two, Orientation bind, int minMax) {
         this.pOne = one;
         this.pTwo = two;
-        this.ignore = new ArrayList();
-        dir = bind;
-        body = new Line();
-        if (Orientation.HORIZONTAL == bind) {
-            if (one.getBody().getCenterY() > two.getBody().getCenterY()) {
-                minMax = 0;
-            } else {
-                minMax = 1;
-            }
-        } else {
-            if (one.getBody().getCenterX() > two.getBody().getCenterX()) {
-                minMax = 1;
-            } else {
-                minMax = 0;
-            }
-        }
+        this.dir = bind;
+        this.minMax = minMax;
+
         curr = pOne;
         setup();
         Pane pane = (Pane) pOne.getBody().getParent();
@@ -58,7 +45,6 @@ public class DynamicBound extends Bound {
     protected boolean checkBound(Point point) {
         boolean collisionDetected = false;
         if (!ignore.contains(point)) {
-            this.updateState();
             Shape intersect = Shape.intersect(body, point.getBody());
             if (intersect.getBoundsInLocal().getWidth() != -1) {
                 collisionDetected = true;
@@ -80,6 +66,11 @@ public class DynamicBound extends Bound {
                 y -= 360;
             }
             point.setVelocity(y);
+            if(point != pOne){
+                this.unignore(pOne);
+                this.applyBound(pOne);
+                this.ignore(pOne);
+            }
         }
     }
 
@@ -112,6 +103,13 @@ public class DynamicBound extends Bound {
         angle = deg;
     }
 
+    @Override
+    protected void update() {
+        updateState();
+        updateTarget();
+        updateBind();
+    }
+
     protected void ignore(Point ig) {
         if (!ignore.contains(ig)) {
             ignore.add(ig);
@@ -125,36 +123,88 @@ public class DynamicBound extends Bound {
     }
 
     private void setup() {
-        if (pOne.getBody().getParent() == null) {
-            System.out.println("Tis null");
-        } else {
-            Pane parent = (Pane) pOne.getBody().getParent();
-            if (dir == Orientation.VERTICAL) {
-                body.startXProperty().bind(Bindings.createDoubleBinding(() -> {
-                    Bounds b = pOne.getBody().getBoundsInParent();
-                    return b.getMinX() + b.getWidth() / 2;
-                }, pOne.getBody().boundsInParentProperty()));
-                body.endXProperty().bind(Bindings.createDoubleBinding(() -> {
-                    Bounds b = pOne.getBody().getBoundsInParent();
-                    return b.getMinX() + b.getWidth() / 2;
-                }, pOne.getBody().boundsInParentProperty()));
-                body.setStartY(0);
-                body.setEndY(parent.getMinHeight());
-            } else if (dir == Orientation.HORIZONTAL) {
-                body.startYProperty().bind(Bindings.createDoubleBinding(() -> {
-                    Bounds b = pOne.getBody().getBoundsInParent();
-                    return b.getMinY() + b.getWidth() / 2;
-                }, pOne.getBody().boundsInParentProperty()));
-                body.endYProperty().bind(Bindings.createDoubleBinding(() -> {
-                    Bounds b = pOne.getBody().getBoundsInParent();
-                    return b.getMinY() + b.getWidth() / 2;
-                }, pOne.getBody().boundsInParentProperty()));
-                body.setStartX(0);
-                body.setEndX(parent.getMinWidth());
-            }
-            body.toBack();
-        }
+        this.ignore = new ArrayList();
+        this.body = new Line();
         body.setStrokeWidth(2.0);
+        curr = null;
+        ignore.add(pOne);
+        ignore.add(pTwo);
+        updateTarget();
+        updateBind();
+    }
+
+    private void updateBind() {
+        if (curr != pOne || curr == null) {
+            System.out.println("switched");
+            if (pOne.getBody().getParent() == null) {
+                System.out.println("Tis null");
+            } else {
+                Pane parent = (Pane) pOne.getBody().getParent();
+                if (dir == Orientation.VERTICAL) {
+                    body.startXProperty().bind(Bindings.createDoubleBinding(() -> {
+                        Bounds b = pOne.getBody().getBoundsInParent();
+                        return b.getMinX() + b.getWidth() / 2;
+                    }, pOne.getBody().boundsInParentProperty()));
+                    body.endXProperty().bind(Bindings.createDoubleBinding(() -> {
+                        Bounds b = pOne.getBody().getBoundsInParent();
+                        return b.getMinX() + b.getWidth() / 2;
+                    }, pOne.getBody().boundsInParentProperty()));
+                    body.setStartY(0);
+                    body.setEndY(parent.getMinHeight());
+                } else if (dir == Orientation.HORIZONTAL) {
+                    body.startYProperty().bind(Bindings.createDoubleBinding(() -> {
+                        Bounds b = pOne.getBody().getBoundsInParent();
+                        return b.getMinY() + b.getWidth() / 2;
+                    }, pOne.getBody().boundsInParentProperty()));
+                    body.endYProperty().bind(Bindings.createDoubleBinding(() -> {
+                        Bounds b = pOne.getBody().getBoundsInParent();
+                        return b.getMinY() + b.getWidth() / 2;
+                    }, pOne.getBody().boundsInParentProperty()));
+                    body.setStartX(0);
+                    body.setEndX(parent.getMinWidth());
+                }
+                body.toBack();
+                curr = pOne;
+            }
+        }
+    }
+
+    private void updateTarget() {
+        if (Orientation.HORIZONTAL == dir) {
+            if (minMax == 0) {
+                if (pOne.getBody().getCenterY() < pTwo.getBody().getCenterY()); else {
+                    Point hold = pOne;
+                    pOne = pTwo;
+                    pTwo = hold;
+                }
+            } else {
+                if (pOne.getBody().getCenterY() > pTwo.getBody().getCenterY());else {
+                    Point hold = pOne;
+                    pOne = pTwo;
+                    pTwo = hold;
+                    System.out.println("switched");
+
+                }
+            }
+        } else {
+            if (minMax == 0) {
+                if (pOne.getBody().getCenterX() < pTwo.getBody().getCenterX()); else {
+                    Point hold = pOne;
+                    pOne = pTwo;
+                    pTwo = hold;
+                    System.out.println("switched");
+
+                }
+            } else {
+                if (pOne.getBody().getCenterX() > pTwo.getBody().getCenterX()); else {
+                    Point hold = pOne;
+                    pOne = pTwo;
+                    pTwo = hold;
+                    System.out.println("switched");
+
+                }
+            }
+        }
     }
 
 }

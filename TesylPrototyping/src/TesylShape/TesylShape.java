@@ -14,7 +14,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
-import tesylprototyping.TesylPoint;
 
 /**
  *
@@ -66,15 +65,15 @@ public class TesylShape {
         setupTimeline();
     }
 
-    private void setupPoints() {
-        points = new ArrayList<>();
-        for (int i = 0; i < POINT_COUNT; i++) {
-            Point hold = new Point();
-//            hold.setPosition(this.getRandomPositon());
-            rootPane.getChildren().add(hold.getBody());
-            points.add(hold);
-        }
-    }
+//    private void setupPoints() {
+//        points = new ArrayList<>();
+//        for (int i = 0; i < POINT_COUNT; i++) {
+////            Point hold = new Point();
+////            hold.setPosition(this.getRandomPositon());
+//            rootPane.getChildren().add(hold.getBody());
+//            points.add(hold);
+//        }
+//    }
 
     private void setupBounds() {
         bounds = new ArrayList<>();

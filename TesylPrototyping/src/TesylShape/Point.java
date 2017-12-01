@@ -6,7 +6,9 @@
 package TesylShape;
 
 import Tools.Vector;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 
 /**
  *
@@ -19,9 +21,12 @@ public class Point {
     private double angle;
     private Circle body;
     protected double reuptake;
+    protected int index;
+    protected Text view;
 
     //Constructor functions/////////////////////////////////////////////////////
-    protected Point() {
+    protected Point(int index) {
+        this.index = index;
         setup();
     }
 
@@ -44,7 +49,7 @@ public class Point {
         if (reuptake == 0) {
             this.angle = angle;
             this.velocity = Vector.angleToVector(angle);
-            reuptake = 100;
+            reuptake = 10;
         }
     }
 
@@ -61,11 +66,17 @@ public class Point {
         return this.body;
     }
 
+    protected Text getLabel() {
+        return this.view;
+    }
+
     protected void update() {
         if (reuptake > 0) {
             reuptake--;
         }
         this.position = position.add(velocity);
+        this.view.setX(position.x);
+        this.view.setY(position.y);
         this.body.setCenterX(position.x);
         this.body.setCenterY(position.y);
     }
@@ -75,8 +86,14 @@ public class Point {
         this.body = new Circle();
         this.setPosition(new Vector(50, 50));
         this.body.setRadius(10.0);
-        this.angle = Math.random() * 360;
+        this.angle = Math.random() *360;
         this.velocity = Vector.angleToVector(angle);
+
+        this.view = new Text();
+        view.setText(Integer.toString(index));
+        view.setX(50);
+        view.setY(50);
+        view.setStroke(Paint.valueOf("BLUE"));
     }
 
 }
