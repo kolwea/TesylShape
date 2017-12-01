@@ -36,6 +36,10 @@ public class Vector {
         Vector hai = new Vector(x - me.x, y - me.y);
         return hai;
     }
+    
+    public Vector multiply(Vector me){
+        return new Vector(x*me.x,y*me.y);
+    }
 
     public void printVector() {
         System.out.println("X: " + x + " Y: " + y);

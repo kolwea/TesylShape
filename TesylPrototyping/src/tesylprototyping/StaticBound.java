@@ -5,14 +5,18 @@
  */
 package tesylprototyping;
 
+import TesylShape.Face;
+
 /**
  *
  * @author Kolbe
  */
 public class StaticBound extends TesylBound {
+    private Face face;
 
     public StaticBound() {
         super();
+        this.face = face;
     }
 
     @Override
@@ -33,8 +37,8 @@ public class StaticBound extends TesylBound {
     }
 
     @Override
-    protected void updateState(){
-        
+    protected void updateState() {
+
     }
 
     @Override
@@ -44,7 +48,5 @@ public class StaticBound extends TesylBound {
         bound.setEndX(start.x);
         bound.setEndY(start.y);
     }
-    
-    
 
 }

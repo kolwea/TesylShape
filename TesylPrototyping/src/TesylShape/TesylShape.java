@@ -27,10 +27,10 @@ public class TesylShape {
 
     private ArrayList<Point> points;
     private ArrayList<Bound> bounds;
-    
-    private Face face;
 
-    private final double POINT_COUNT = 4;
+    private Face face1, face2, face3, face4, face5, face6;
+
+    private final double POINT_COUNT = 8;
     private final double MIN_SPEED = 0; //Multiplier to speed - 1.0 equivilent 100% ;
     private final double MAX_SPEED = 1.0;
 
@@ -54,14 +54,13 @@ public class TesylShape {
     }
 
     private void update() {
-        face.update();
+        face1.update();
+        face2.update();
     }
 
     private void setup() {
         setupPoints();
-//        setupBounds();
-        face = new Face(points.get(0),points.get(1),points.get(2),points.get(3));
-        rootPane.getChildren().add(face.face);
+        setupFaces();
         setupTimeline();
     }
 
@@ -70,9 +69,40 @@ public class TesylShape {
         for (int i = 0; i < POINT_COUNT; i++) {
             Point hold = new Point(i);
 //            hold.setPosition(this.getRandomPositon());
-//            rootPane.getChildren().add(hold.getBody());
+            rootPane.getChildren().add(hold.getBody());
             points.add(hold);
         }
+        double minWidth = rootPane.getMinWidth(),minHeight = rootPane.getMinHeight();
+        Vector zero = new Vector(minWidth/2 , minHeight/2 - minHeight/4);
+        zero.printVector();
+        Vector one = new Vector(zero.x - 100, zero.y + 100);
+        Vector two = new Vector(zero.x, one.y + 100);
+        Vector three = new Vector (zero.x + 100, one.y);
+        Vector four = new Vector(zero.x - 50 ,rootPane.getMinHeight()/2 + 50);
+        Vector five = new Vector(one.x + 50 , four.y + 50);
+        Vector six = new Vector(five.x+50,five.y+50);
+        Vector seven = new Vector(three.x + 50, four.y+50);
+
+        points.get(0).setPosition(zero);
+        points.get(1).setPosition(one);
+        points.get(2).setPosition(two);
+        points.get(3).setPosition(three);
+        points.get(4).setPosition(four);
+        points.get(5).setPosition(five);
+        points.get(6).setPosition(six);
+        points.get(7).setPosition(seven);
+
+    }
+
+    private void setupFaces() {
+        face1 = new Face(points.get(0), points.get(1), points.get(2), points.get(3));
+        face2 = new Face(points.get(0), points.get(1), points.get(4), points.get(5));
+//        face3 = new Face(points.get(0), points.get(3), points.get(7), points.get(4));
+//        face2 = new Face(points.get(0), points.get(1), points.get(4), points.get(5));
+//        face1 = new Face(points.get(0), points.get(1), points.get(2), points.get(3));
+//        face2 = new Face(points.get(0), points.get(1), points.get(4), points.get(5));
+
+//        rootPane.getChildren().addAll(face1.face, face2.face);
     }
 
     protected Vector getRandomPositon() {

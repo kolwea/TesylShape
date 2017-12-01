@@ -36,8 +36,8 @@ public class DynamicBound extends Bound {
 
         curr = pOne;
         setup();
-        Pane pane = (Pane) pOne.getBody().getParent();
-        pane.getChildren().add(body);
+//        Pane pane = (Pane) pOne.getBody().getParent();
+//        pane.getChildren().add(body);
     }
 
     @Override
@@ -134,7 +134,6 @@ public class DynamicBound extends Bound {
 
     private void updateBind() {
         if (curr != pOne || curr == null) {
-            System.out.println("switched");
             if (pOne.getBody().getParent() == null) {
                 System.out.println("Tis null");
             } else {

@@ -27,10 +27,8 @@ public class Face {
     protected Face(Point once, Point dos, Point tres, Point quat) {
         face = new Pane();
         face.setMinSize(500, 500);
+        this.face = face;
         setup(once, dos, tres, quat);
-        setupPoints();
-        setupBounds();
-        setupShape();
     }
 
     protected void update() {
@@ -41,29 +39,31 @@ public class Face {
                     curr.applyBound(points[i]);
                 }
             }
-            points[i].update();
+//            points[i].update();
             updateShape();
         }
     }
 
     protected void setup(Point o, Point d, Point t, Point q) {
         points = new Point[]{o, d, t, q};
-        face.getChildren().addAll(points[0].getBody(), points[1].getBody(), points[2].getBody(), points[3].getBody());
+//        face.getChildren().addAll(points[0].getBody(), points[1].getBody(), points[2].getBody(), points[3].getBody());
+        setupBounds();
+        setupShape();
     }
 
-    private void setupPoints() {
-        points[0].setPosition(new Vector(face.getMinWidth() / 2 - 100, face.getMinHeight() / 2 - 100));
-        Vector pos0 = points[0].getPosition();
-        points[1].setPosition(new Vector(pos0.x - 30, pos0.y + 30));
-
-        points[2].setPosition(new Vector(face.getMinWidth() / 2 + 100, face.getMinHeight() / 2 + 100));
-        Vector pos2 = points[2].getPosition();
-        points[3].setPosition(new Vector(pos2.x + 30, pos2.y - 30));
-
-        points[0].getBody().setFill(Paint.valueOf("RED"));
-        points[2].getBody().setFill(Paint.valueOf("RED"));
-
-    }
+//    private void setupPoints() {
+//        points[0].setPosition(new Vector(face.getMinWidth() / 2 - 100, face.getMinHeight() / 2 - 100));
+//        Vector pos0 = points[0].getPosition();
+//        points[1].setPosition(new Vector(pos0.x - 50, pos0.y + 50));
+//
+//        points[2].setPosition(new Vector(pos0.x + face.getMinHeight()/2, pos0.y + face.getMinWidth()/2));
+//        Vector pos2 = points[2].getPosition();
+//        points[3].setPosition(new Vector(pos2.x + 50, pos2.y - 50));
+//
+//        points[0].getBody().setFill(Paint.valueOf("RED"));
+//        points[2].getBody().setFill(Paint.valueOf("RED"));
+//
+//    }
 
     private void setupBounds() {
         bounds = new ArrayList<>();
@@ -119,7 +119,7 @@ public class Face {
             points[3].getBody().getCenterX(), points[3].getBody().getCenterY()
         });
         body.setOpacity(0.5);
-        body.setFill(Color.BROWN);
+        body.setFill(Color.rgb((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255)));
         face.getChildren().add(body);
     }
 

@@ -49,7 +49,7 @@ public class Point {
         if (reuptake == 0) {
             this.angle = angle;
             this.velocity = Vector.angleToVector(angle);
-            reuptake = 10;
+            reuptake = 0;
         }
     }
 
@@ -74,7 +74,8 @@ public class Point {
         if (reuptake > 0) {
             reuptake--;
         }
-        this.position = position.add(velocity);
+        this.position = position.add(velocity.multiply(new Vector(0.5,0.5)));
+        this.position = position;
         this.view.setX(position.x);
         this.view.setY(position.y);
         this.body.setCenterX(position.x);
