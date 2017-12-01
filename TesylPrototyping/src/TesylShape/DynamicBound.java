@@ -38,7 +38,6 @@ public class DynamicBound extends Bound {
         setup();
         Pane pane = (Pane) pOne.getBody().getParent();
         pane.getChildren().add(body);
-
     }
 
     @Override

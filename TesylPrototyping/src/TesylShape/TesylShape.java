@@ -30,7 +30,7 @@ public class TesylShape {
     
     private Face face;
 
-    private final double POINT_COUNT = 5;
+    private final double POINT_COUNT = 4;
     private final double MIN_SPEED = 0; //Multiplier to speed - 1.0 equivilent 100% ;
     private final double MAX_SPEED = 1.0;
 
@@ -58,47 +58,21 @@ public class TesylShape {
     }
 
     private void setup() {
-//        setupPoints();
+        setupPoints();
 //        setupBounds();
-        face = new Face();
+        face = new Face(points.get(0),points.get(1),points.get(2),points.get(3));
         rootPane.getChildren().add(face.face);
         setupTimeline();
     }
 
-//    private void setupPoints() {
-//        points = new ArrayList<>();
-//        for (int i = 0; i < POINT_COUNT; i++) {
-////            Point hold = new Point();
-////            hold.setPosition(this.getRandomPositon());
+    private void setupPoints() {
+        points = new ArrayList<>();
+        for (int i = 0; i < POINT_COUNT; i++) {
+            Point hold = new Point(i);
+//            hold.setPosition(this.getRandomPositon());
 //            rootPane.getChildren().add(hold.getBody());
-//            points.add(hold);
-//        }
-//    }
-
-    private void setupBounds() {
-        bounds = new ArrayList<>();
-        StaticBound top = new StaticBound(new Vector(0, 0), new Vector(500, 0));
-        StaticBound right = new StaticBound(new Vector(500, 0), new Vector(500, 500));
-        StaticBound bottom = new StaticBound(new Vector(500, 500), new Vector(0, 500));
-        StaticBound left = new StaticBound(new Vector(0, 0), new Vector(0, 500));
-
-        bounds.add(top);
-        bounds.add(left);
-        bounds.add(right);
-        bounds.add(bottom);
-
-//        DynamicBound one = new DynamicBound(points.get(0),Orientation.HORIZONTAL);
-//        DynamicBound two = new DynamicBound(points.get(2),Orientation.HORIZONTAL);
-
-//        bounds.add(one);
-//        bounds.add(two);
-
-        rootPane.getChildren().add(top.getBody());
-        rootPane.getChildren().add(left.getBody());
-        rootPane.getChildren().add(right.getBody());
-        rootPane.getChildren().add(bottom.getBody());
-//        rootPane.getChildren().add(one.getBody());
-//        rootPane.getChildren().add(two.getBody());
+            points.add(hold);
+        }
     }
 
     protected Vector getRandomPositon() {
