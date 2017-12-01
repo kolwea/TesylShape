@@ -86,7 +86,7 @@ public class Point {
     private void setup() {
         this.body = new Circle();
         this.setPosition(new Vector(50, 50));
-        this.body.setRadius(5.0);
+        this.body.setRadius(10.0);
         this.angle = Math.random() *360;
         this.velocity = Vector.angleToVector(angle);
 
