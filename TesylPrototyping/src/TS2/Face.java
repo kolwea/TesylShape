@@ -7,16 +7,13 @@ package TS2;
 
 import Tools.Vector;
 import java.util.ArrayList;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
+import javafx.beans.binding.Bindings;
+import javafx.geometry.Bounds;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
-import javafx.util.Duration;
 
 /**
  *
@@ -25,18 +22,18 @@ import javafx.util.Duration;
 public class Face {
 
     protected Pane pane;
-    private Circle body;
+    protected Circle body;
     private Polygon face;
-    private Vector position, velocity;
+    private Vector position;
     private double radius;
-    private ArrayList<Point> points;
-    private double rotation;
-    private KeyFrame keyframe;
-    private Timeline timeline;
+    protected ArrayList<Point> points;
+    private double rotation, velocity;
+    protected int connectIndex;
+
     int ike;
     double key;
 
-    private final boolean SHOW_MODEL = false;
+    private final boolean SHOW_MODEL = true;
     private Line horz, vert;
 
     protected Face(Pane par) {
@@ -44,14 +41,23 @@ public class Face {
         setup();
         ike = 0;
         key = 0;
+        connectIndex = 0;
     }
 
     protected Pane getPane() {
         return this.pane;
     }
 
+    protected double getVelcity() {
+        return this.velocity;
+    }
+
+    protected void setVelocity(double angle) {
+        this.velocity = angle;
+    }
+
     protected void update() {
-        this.position = position.add(velocity);
+        this.position = position.add(Vector.angleToVector(velocity));
         updatePoints();
         updateModel();
         updateShape();
@@ -74,13 +80,12 @@ public class Face {
     }
 
     private void setup() {
-        this.position = new Vector(0, 0);
+        this.position = new Vector(100, 100);
         this.radius = 50.0;
         this.rotation = 0;
-        this.velocity = new Vector(0.5, 0.5);
+        this.velocity = 315;
         setupBody();
         setupPoints();
-        setupTimeline();
         setupShape();
 //        updatePoints();
 
@@ -91,10 +96,11 @@ public class Face {
         for (int i = 0; i < 4; i++) {
             Point hold = new Point(i);
             points.add(hold);
-            if (SHOW_MODEL) {
-                pane.getChildren().add(hold.getLabel());
-                pane.getChildren().add(hold.getBody());
-            }
+//            pane.getChildren().add(hold.getLabel());
+            pane.getChildren().add(hold.getBody());
+//            hold.getLabel().setText("");
+            hold.getBody().toFront();
+
         }
     }
 
@@ -105,18 +111,10 @@ public class Face {
             body.setCenterY(position.y);
             body.setRadius(radius);
             body.setFill(Color.CADETBLUE);
+            body.setOpacity(0.0);
             pane.getChildren().add(body);
         }
 
-    }
-
-    private void setupTimeline() {
-        keyframe = new KeyFrame(Duration.millis(10), (ActionEvent event) -> {
-            update();
-        });
-        timeline = new Timeline(keyframe);
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
     }
 
     private void setupShape() {
@@ -127,9 +125,10 @@ public class Face {
             points.get(2).getBody().getCenterX(), points.get(2).getBody().getCenterY(),
             points.get(3).getBody().getCenterX(), points.get(3).getBody().getCenterY()
         });
-        face.setOpacity(0.5);
+        face.setOpacity(0.0);
         face.setFill(Color.rgb((150), (int) (Math.random() * 255), 150));
         pane.getChildren().add(face);
+        face.toFront();
     }
 
     private void updateShape() {
@@ -167,11 +166,57 @@ public class Face {
             for (int i = 0; i < 4; i++) {
                 Point curr = points.get(i);
                 Vector pos = curr.getPosition();
+                curr.getLabel().setText(Integer.toString(curr.index));
                 curr.getLabel().setX(pos.x + 10);
                 curr.getLabel().setY(pos.y - 10);
             }
+        } else {
+            for (int i = 0; i < 4; i++) {
+                Point curr = points.get(i);
+                curr.getLabel().setText("");
+            }
         }
+    }
 
+    protected void connect(Face face) {
+        if(connectIndex < 4){
+            int other = connectIndex+1,faceOther = face.connectIndex;
+            if(other > 3)
+                other = 0;
+            if(faceOther > 3)
+                faceOther = 0;
+            updateBind(points.get(connectIndex),points.get(other));
+            updateBind(points.get(connectIndex),face.points.get(face.connectIndex));
+            updateBind(points.get(other),face.points.get(faceOther));
+            updateBind(face.points.get(faceOther),face.points.get(face.connectIndex));
+            connectIndex++;
+            face.connectIndex++;
+        }
+        
+    }
+
+    private void updateBind(Point a, Point c) {
+        Pane parent = pane;
+        Line body = new Line();
+        body.setStrokeWidth(3.0);
+        body.startXProperty().bind(Bindings.createDoubleBinding(() -> {
+            Bounds b = a.getBody().getBoundsInParent();
+            return b.getMinX() + b.getWidth() / 2;
+        }, a.getBody().boundsInParentProperty()));
+        body.endXProperty().bind(Bindings.createDoubleBinding(() -> {
+            Bounds b = c.getBody().getBoundsInParent();
+            return b.getMinX() + b.getWidth() / 2;
+        }, c.getBody().boundsInParentProperty()));
+        body.startYProperty().bind(Bindings.createDoubleBinding(() -> {
+            Bounds b = a.getBody().getBoundsInParent();
+            return b.getMinY() + b.getWidth() / 2;
+        }, a.getBody().boundsInParentProperty()));
+        body.endYProperty().bind(Bindings.createDoubleBinding(() -> {
+            Bounds b = c.getBody().getBoundsInParent();
+            return b.getMinY() + b.getWidth() / 2;
+        }, c.getBody().boundsInParentProperty()));
+        parent.getChildren().add(body);
+        body.toFront();
     }
 
 }

@@ -73,13 +73,13 @@ public class Point {
     //Helper functions//////////////////////////////////////////////////////////
     private void setup() {
         this.body = new Circle();
-        this.body.setRadius(10.0);
+        this.body.setRadius(5.0);
 
         this.view = new Text();
         view.setText(Integer.toString(index));
         view.setX(50);
         view.setY(50);
-        view.setStroke(Paint.valueOf("BLUE"));
+        view.setStroke(Paint.valueOf("GREEN"));
     }
 
 }

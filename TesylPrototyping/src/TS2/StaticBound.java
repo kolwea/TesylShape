@@ -5,7 +5,6 @@
  */
 package TS2;
 
-
 import Tools.Vector;
 import java.util.ArrayList;
 import javafx.scene.shape.Line;
@@ -32,9 +31,24 @@ public class StaticBound extends Bound {
 
     @Override
     protected void applyBound(Point point) {
-        if(ignore == null || !ignore.contains(point)){
+        if (ignore == null || !ignore.contains(point)) {
+            double x, y;
+            x = point.getAngle() - angle;
+            y = angle - x;
+            if (y <= 0) {
+                y += 360;
+            }
+            if (y > 360) {
+                y -= 360;
+            }
+            point.reuptake = 0;
+            point.setVelocity(y);
+        }
+    }
+
+    protected void applyBound(Face face) {
         double x, y;
-        x = point.getAngle() - angle;
+        x = face.getVelcity() - angle;
         y = angle - x;
         if (y <= 0) {
             y += 360;
@@ -42,10 +56,8 @@ public class StaticBound extends Bound {
         if (y > 360) {
             y -= 360;
         }
-        point.reuptake = 0; 
-        point.setVelocity(y);
+        face.setVelocity(y);
 
-        }
     }
 
     @Override
@@ -91,18 +103,29 @@ public class StaticBound extends Bound {
 
         return collisionDetected;
     }
-    
-    protected void ignore(Point ig){
-        if(ignore == null)
+
+    protected boolean checkBound(Face face) {
+        boolean collisionDetected = false;
+        Shape intersect = Shape.intersect(body, face.body);
+        if (intersect.getBoundsInLocal().getWidth() != -1) {
+            collisionDetected = true;
+        }
+
+        return collisionDetected;
+    }
+
+    protected void ignore(Point ig) {
+        if (ignore == null) {
             ignore = new ArrayList<>();
+        }
         ignore.add(ig);
     }
-    
-    protected void unignore(Point ign){
-        if(ignore == null);
-        else{
-            if(ignore.contains(ign))
+
+    protected void unignore(Point ign) {
+        if (ignore == null); else {
+            if (ignore.contains(ign)) {
                 ignore.remove(ign);
+            }
         }
     }
 
