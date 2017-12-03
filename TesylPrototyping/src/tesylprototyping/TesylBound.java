@@ -41,7 +41,7 @@ public abstract class TesylBound {
     protected abstract void createBind();
 
     protected void checkIntersection(TesylPoint curr) {
-        if (bound.intersects(curr.getBody().getBoundsInParent())){
+        if (bound.getBoundsInParent().intersects(curr.getBody().getBoundsInParent())){
             System.out.println("Hit: " + curr.getIndex());
             reflectPoint(curr);
         }

@@ -21,7 +21,7 @@ public class TesylPoint {
 
     //Initialized Variables////////////////////////////////
     private int index;
-    private TesylShape parent;
+    private TesylShapeOld parent;
 
     //Dynamic Variables////////////////////////////////////
     private Vector position, velocity;
@@ -41,7 +41,7 @@ public class TesylPoint {
     private double dAcceleration = 1.0;
     private Color dColor = Color.CORAL;
 
-    public TesylPoint(TesylShape pap, int index) {
+    public TesylPoint(TesylShapeOld pap, int index) {
         this.parent = pap;
         initialize(index);
     }
@@ -105,6 +105,7 @@ public class TesylPoint {
     protected void initialize_Random() {
         setRandomPosition();
         setRandomVelocity();
+        this.position = new Vector(100,100);
     }
 
     protected void setRandomPosition() {

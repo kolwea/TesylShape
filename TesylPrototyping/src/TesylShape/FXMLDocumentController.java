@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tesylprototyping;
+package TesylShape;
 
+import TesylShape.TesylShape;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -34,8 +35,8 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO        
-        TesylShape shape = new TesylShape(vizPane);
-        
+        TesylShape shape = new TesylShape();
+        vizPane.getChildren().add(shape.getPane());       
     }    
     
 }

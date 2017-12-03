@@ -16,7 +16,7 @@ import javafx.util.Duration;
  *
  * @author Kolbe
  */
-public class TesylShape {
+public class TesylShapeOld {
 
     private Timeline timeline;
     private KeyFrame keyframe;
@@ -26,10 +26,10 @@ public class TesylShape {
     private final int pointCount = 1;
     private final double maxVelocity = 2.0, minVelocity = 0.5;
 
-    public TesylShape() {
+    private TesylShapeOld() {
     }
 
-    public TesylShape(AnchorPane pane) {
+    private TesylShapeOld(AnchorPane pane) {
         vizPane = pane;
         initialize();
     }
