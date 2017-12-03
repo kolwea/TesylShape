@@ -98,14 +98,14 @@ public class Face {
 
     private void setupBody() {
         this.body = new Circle();
-        if (SHOW_MODEL) {
+//        if (SHOW_MODEL) {
             body.setCenterX(position.x);
             body.setCenterY(position.y);
             body.setRadius(radius);
             body.setFill(Color.CADETBLUE);
-            body.setOpacity(0.0);
+            body.setOpacity(0.4);
             pane.getChildren().add(body);
-        }
+//        }
 
     }
 
@@ -171,7 +171,7 @@ public class Face {
     }
 
     protected void connect(Face face) {
-        int other = connectIndex + 1, faceOther = face.connectIndex;
+        int other = connectIndex + 1, faceOther = face.connectIndex+1;
         if (other > 3) {
             other = 0;
         }
@@ -179,9 +179,9 @@ public class Face {
             faceOther = 0;
         }
         updateBind(points.get(connectIndex), points.get(other));
+        updateBind(face.points.get(connectIndex), face.points.get(faceOther));
         updateBind(points.get(connectIndex), face.points.get(face.connectIndex));
         updateBind(points.get(other), face.points.get(faceOther));
-        updateBind(face.points.get(faceOther), face.points.get(face.connectIndex));
         connectIndex++;
         face.connectIndex++;
         if (connectIndex > 3) {
@@ -217,16 +217,19 @@ public class Face {
     }
 
     private void updateRadius() {
-        if(ike%50 == 0){
-            if(ike == 300)
+        if (ike % 50 == 0) {
+            if (ike == 300) {
                 ike = 0;
+            }
             add = Math.random() - 0.5;
         }
         radius += add;
-        if(radius <= 10)
+        if (radius <= 10) {
             add *= -1;
-        else if(radius >= 100)
-            add *= -1; 
+        } else if (radius >= 100) {
+            add *= -1;
+        }
+        body.setRadius(radius);
     }
 
     private double noramlize(double angle) {
@@ -238,6 +241,20 @@ public class Face {
             done = angle + 360;
         }
         return done;
+    }
+
+    private void addShape(Point a, Point b, Point c, Point d) {
+        Polygon hold = new Polygon();
+        hold.getPoints().addAll(new Double[]{
+            a.getBody().getCenterX(), a.getBody().getCenterY(),
+            b.getBody().getCenterX(), b.getBody().getCenterY(),
+            b.getBody().getCenterX(), b.getBody().getCenterY(),
+            b.getBody().getCenterX(), b.getBody().getCenterY()
+        });
+        face.setOpacity(0.0);
+        face.setFill(Color.rgb((150), (int) (Math.random() * 255), 150));
+        pane.getChildren().add(face);
+        face.toFront();
     }
 
 }
