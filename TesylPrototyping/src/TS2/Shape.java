@@ -50,7 +50,7 @@ public class Shape {
 
     private void setupFaces() {
         faces = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 4; i++) {
             Face hold = new Face(pane);
             faces.add(hold);
         }
@@ -59,6 +59,22 @@ public class Shape {
         faces.get(0).connect(faces.get(1));
         faces.get(0).connect(faces.get(1));
 
+        faces.get(1).connect(faces.get(2));
+        faces.get(1).connect(faces.get(2));
+        faces.get(1).connect(faces.get(2));
+        faces.get(1).connect(faces.get(2));
+
+        faces.get(2).connect(faces.get(3));
+        faces.get(2).connect(faces.get(3));
+        faces.get(2).connect(faces.get(3));
+        faces.get(2).connect(faces.get(3));
+
+        faces.get(3).connect(faces.get(0));
+        faces.get(3).connect(faces.get(0));
+        faces.get(3).connect(faces.get(0));
+        faces.get(3).connect(faces.get(0));
+
+ 
 
     }
 

@@ -25,7 +25,7 @@ public class Face {
     protected Circle body;
     private Polygon face;
     private Vector position;
-    private double radius;
+    private double radius, add;
     protected ArrayList<Point> points;
     private double rotation, velocity;
     protected int connectIndex;
@@ -58,32 +58,24 @@ public class Face {
 
     protected void update() {
         this.position = position.add(Vector.angleToVector(velocity));
+        updateRadius();
         updatePoints();
         updateModel();
         updateShape();
-        if (rotation > 359) {
-            rotation = 0;
+        if (ike % 100 == 0) {
+            key = Math.random() * 2 - 1;
         }
-        if (ike == 200) {
-            key = Math.random() * 5 - 2.5;
-            ike = 0;
-        }
-        ike++;
+        rotation = noramlize(rotation);
         rotation += key;
-        if (rotation > 360) {
-            rotation -= 360;
-        } else if (rotation <= 0) {
-            rotation += 360;
-        }
-        System.out.println(rotation);
-
+        ike++;
+//        System.out.println(rotation);
     }
 
     private void setup() {
         this.position = new Vector(100, 100);
         this.radius = 50.0;
         this.rotation = 0;
-        this.velocity = 315;
+        this.velocity = 90 + 13;
         setupBody();
         setupPoints();
         setupShape();
@@ -97,7 +89,7 @@ public class Face {
             Point hold = new Point(i);
             points.add(hold);
 //            pane.getChildren().add(hold.getLabel());
-            pane.getChildren().add(hold.getBody());
+//            pane.getChildren().add(hold.getBody());
 //            hold.getLabel().setText("");
             hold.getBody().toFront();
 
@@ -179,26 +171,31 @@ public class Face {
     }
 
     protected void connect(Face face) {
-        if(connectIndex < 4){
-            int other = connectIndex+1,faceOther = face.connectIndex;
-            if(other > 3)
-                other = 0;
-            if(faceOther > 3)
-                faceOther = 0;
-            updateBind(points.get(connectIndex),points.get(other));
-            updateBind(points.get(connectIndex),face.points.get(face.connectIndex));
-            updateBind(points.get(other),face.points.get(faceOther));
-            updateBind(face.points.get(faceOther),face.points.get(face.connectIndex));
-            connectIndex++;
-            face.connectIndex++;
+        int other = connectIndex + 1, faceOther = face.connectIndex;
+        if (other > 3) {
+            other = 0;
         }
-        
+        if (faceOther > 3) {
+            faceOther = 0;
+        }
+        updateBind(points.get(connectIndex), points.get(other));
+        updateBind(points.get(connectIndex), face.points.get(face.connectIndex));
+        updateBind(points.get(other), face.points.get(faceOther));
+        updateBind(face.points.get(faceOther), face.points.get(face.connectIndex));
+        connectIndex++;
+        face.connectIndex++;
+        if (connectIndex > 3) {
+            connectIndex = 0;
+        }
+        if (face.connectIndex > 3) {
+            face.connectIndex = 0;
+        }
     }
 
     private void updateBind(Point a, Point c) {
         Pane parent = pane;
         Line body = new Line();
-        body.setStrokeWidth(3.0);
+        body.setStrokeWidth(1.0);
         body.startXProperty().bind(Bindings.createDoubleBinding(() -> {
             Bounds b = a.getBody().getBoundsInParent();
             return b.getMinX() + b.getWidth() / 2;
@@ -217,6 +214,30 @@ public class Face {
         }, c.getBody().boundsInParentProperty()));
         parent.getChildren().add(body);
         body.toFront();
+    }
+
+    private void updateRadius() {
+        if(ike%50 == 0){
+            if(ike == 300)
+                ike = 0;
+            add = Math.random() - 0.5;
+        }
+        radius += add;
+        if(radius <= 10)
+            add *= -1;
+        else if(radius >= 100)
+            add *= -1; 
+    }
+
+    private double noramlize(double angle) {
+        double done = angle;
+        if (angle > 360) {
+            done = angle - 360;
+        }
+        if (angle <= 0) {
+            done = angle + 360;
+        }
+        return done;
     }
 
 }
