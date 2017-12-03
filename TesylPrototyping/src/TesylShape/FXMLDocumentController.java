@@ -5,6 +5,7 @@
  */
 package TesylShape;
 
+import TS2.Shape;
 import TesylShape.TesylShape;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,7 +36,7 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO        
-        TesylShape shape = new TesylShape();
+        Shape shape = new Shape();
         vizPane.getChildren().add(shape.getPane());       
     }    
     
