@@ -74,8 +74,20 @@ public class Shape {
         faces.get(3).connect(faces.get(0));
         faces.get(3).connect(faces.get(0));
 
- 
-
+//        faces.get(1).connect(faces.get(2));
+//        faces.get(1).connect(faces.get(2));
+//        faces.get(1).connect(faces.get(2));
+//        faces.get(1).connect(faces.get(2));
+//
+//        faces.get(2).connect(faces.get(3));
+//        faces.get(2).connect(faces.get(3));
+//        faces.get(2).connect(faces.get(3));
+//        faces.get(2).connect(faces.get(3));
+//
+//        faces.get(3).connect(faces.get(0));
+//        faces.get(3).connect(faces.get(0));
+//        faces.get(3).connect(faces.get(0));
+//        faces.get(3).connect(faces.get(0));
     }
 
     private void setupBounds() {

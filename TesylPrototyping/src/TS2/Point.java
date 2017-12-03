@@ -73,7 +73,7 @@ public class Point {
     //Helper functions//////////////////////////////////////////////////////////
     private void setup() {
         this.body = new Circle();
-        this.body.setRadius(5.0);
+        this.body.setRadius(2.0);
 
         this.view = new Text();
         view.setText(Integer.toString(index));

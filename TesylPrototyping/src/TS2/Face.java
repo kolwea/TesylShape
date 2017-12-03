@@ -63,7 +63,7 @@ public class Face {
         updateModel();
         updateShape();
         if (ike % 100 == 0) {
-            key = Math.random() * 2 - 1;
+            key = Math.random() * 3 - 1.5;
         }
         rotation = noramlize(rotation);
         rotation += key;
@@ -89,7 +89,7 @@ public class Face {
             Point hold = new Point(i);
             points.add(hold);
 //            pane.getChildren().add(hold.getLabel());
-//            pane.getChildren().add(hold.getBody());
+            pane.getChildren().add(hold.getBody());
 //            hold.getLabel().setText("");
             hold.getBody().toFront();
 
