@@ -22,18 +22,19 @@ import javafx.scene.shape.Polygon;
 public class Face {
 
     protected Pane pane;
-    protected Circle body;
+    protected Circle body, fake;
     private Polygon face;
     private Vector position;
     private double radius, add;
     protected ArrayList<Point> points;
     private double rotation, velocity;
     protected int connectIndex;
+    protected ArrayList<Side> sides;
 
     int ike;
     double key;
 
-    private final boolean SHOW_MODEL = true;
+    private final boolean SHOW_MODEL = false;
     private Line horz, vert;
 
     protected Face(Pane par) {
@@ -58,20 +59,24 @@ public class Face {
 
     protected void update() {
         this.position = position.add(Vector.angleToVector(velocity));
+
         updateRadius();
         updatePoints();
         updateModel();
         updateShape();
-        if (ike % 100 == 0) {
+        updateSides();
+        if (ike % 200 == 0) {
             key = Math.random() * 3 - 1.5;
         }
         rotation = noramlize(rotation);
         rotation += key;
         ike++;
+
 //        System.out.println(rotation);
     }
 
     private void setup() {
+        sides = new ArrayList<>();
         this.position = new Vector(100, 100);
         this.radius = 50.0;
         this.rotation = 0;
@@ -99,14 +104,27 @@ public class Face {
     private void setupBody() {
         this.body = new Circle();
 //        if (SHOW_MODEL) {
-            body.setCenterX(position.x);
-            body.setCenterY(position.y);
-            body.setRadius(radius);
-            body.setFill(Color.CADETBLUE);
-            body.setOpacity(0.4);
-            pane.getChildren().add(body);
-//        }
+        body.setCenterX(position.x);
+        body.setCenterY(position.y);
+        body.setRadius(radius);
+        body.setFill(Color.CADETBLUE);
+        body.setOpacity(0.1);
+//        pane.getChildren().add(body);
 
+        fake = new Circle();
+        fake.setCenterX(position.x);
+        fake.setCenterY(position.y);
+        fake.setRadius(radius);
+        fake.setFill(Color.web("#A63446"));
+        fake.setOpacity(0.5);
+        pane.getChildren().add(fake);
+        fake.toBack();
+        fake.toBack();
+        fake.toBack();
+        fake.toBack();
+        fake.toBack();
+
+//        }
     }
 
     private void setupShape() {
@@ -117,8 +135,9 @@ public class Face {
             points.get(2).getBody().getCenterX(), points.get(2).getBody().getCenterY(),
             points.get(3).getBody().getCenterX(), points.get(3).getBody().getCenterY()
         });
-        face.setOpacity(0.0);
-        face.setFill(Color.rgb((150), (int) (Math.random() * 255), 150));
+        face.setOpacity(0.1);
+        face.setStroke(Color.web("#23CE6B"));
+        face.setStrokeWidth(0.0);
         pane.getChildren().add(face);
         face.toFront();
     }
@@ -155,6 +174,8 @@ public class Face {
         if (SHOW_MODEL) {
             this.body.setCenterX(position.x);
             this.body.setCenterY(position.y);
+            this.fake.setCenterX(position.x);
+            this.fake.setCenterY(position.y);
             for (int i = 0; i < 4; i++) {
                 Point curr = points.get(i);
                 Vector pos = curr.getPosition();
@@ -166,22 +187,33 @@ public class Face {
             for (int i = 0; i < 4; i++) {
                 Point curr = points.get(i);
                 curr.getLabel().setText("");
+                this.body.setCenterX(position.x);
+                this.body.setCenterY(position.y);
+                this.fake.setCenterX(position.x);
+                this.fake.setCenterY(position.y);
             }
         }
     }
 
     protected void connect(Face face) {
-        int other = connectIndex + 1, faceOther = face.connectIndex+1;
+        int other = connectIndex + 1, faceOther = face.connectIndex + 1;
         if (other > 3) {
             other = 0;
         }
         if (faceOther > 3) {
             faceOther = 0;
         }
-        updateBind(points.get(connectIndex), points.get(other));
-        updateBind(face.points.get(connectIndex), face.points.get(faceOther));
-        updateBind(points.get(connectIndex), face.points.get(face.connectIndex));
-        updateBind(points.get(other), face.points.get(faceOther));
+//        updateBind(points.get(connectIndex), points.get(other));
+//        updateBind(points.get(other), face.points.get(faceOther));
+//        updateBind(face.points.get(faceOther), face.points.get(face.connectIndex));
+//        updateBind(points.get(face.connectIndex), face.points.get(connectIndex));
+
+        Side test = new Side(pane);
+        test.addPoint(points.get(connectIndex));
+        test.addPoint(face.points.get(face.connectIndex));
+        test.addPoint(face.points.get(faceOther));
+        test.addPoint(points.get(other));
+
         connectIndex++;
         face.connectIndex++;
         if (connectIndex > 3) {
@@ -190,6 +222,8 @@ public class Face {
         if (face.connectIndex > 3) {
             face.connectIndex = 0;
         }
+
+        sides.add(test);
     }
 
     private void updateBind(Point a, Point c) {
@@ -217,11 +251,11 @@ public class Face {
     }
 
     private void updateRadius() {
-        if (ike % 50 == 0) {
-            if (ike == 300) {
+        if (ike % 100 == 0) {
+            if (ike == 1000) {
                 ike = 0;
             }
-            add = Math.random() - 0.5;
+            add = Math.random() * 0.1 - 0.05;
         }
         radius += add;
         if (radius <= 10) {
@@ -229,7 +263,9 @@ public class Face {
         } else if (radius >= 100) {
             add *= -1;
         }
-        body.setRadius(radius);
+        if (points.get(0).getPosition() != null && fake != null && position != null) {
+           fake.setRadius(points.get(0).getPosition().distance(position)-6.0);
+        }
     }
 
     private double noramlize(double angle) {
@@ -255,6 +291,12 @@ public class Face {
         face.setFill(Color.rgb((150), (int) (Math.random() * 255), 150));
         pane.getChildren().add(face);
         face.toFront();
+    }
+
+    private void updateSides() {
+        for (Side curr : sides) {
+            curr.update();
+        }
     }
 
 }
