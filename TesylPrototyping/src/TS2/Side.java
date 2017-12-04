@@ -53,10 +53,10 @@ public class Side {
             points.get(2).getBody().getCenterX(), points.get(2).getBody().getCenterY(),
             points.get(3).getBody().getCenterX(), points.get(3).getBody().getCenterY()
         });
-        side.setOpacity(0.33);
+        side.setOpacity(0.6);
         side.setFill(Color.web("#23CE6B"));
         side.setStroke(Color.web("#000004"));
-        side.setStrokeWidth(0.1);
+        side.setStrokeWidth(0.0);
         pane.getChildren().add(side);
 //        side.toFront();
         System.out.println("Did it");
