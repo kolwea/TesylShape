@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package TesylShape;
+package TS2;
 
 import TS2.Shape;
-import TesylShape.TesylShape;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
