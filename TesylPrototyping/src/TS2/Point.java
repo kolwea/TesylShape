@@ -74,7 +74,6 @@ public class Point {
     private void setup() {
         this.body = new Circle();
         this.body.setRadius(2.0);
-
         this.view = new Text();
         view.setText(Integer.toString(index));
         view.setX(50);

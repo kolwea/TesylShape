@@ -35,7 +35,6 @@ public class Face {
     double key;
 
     private final boolean SHOW_MODEL = false;
-    private Line horz, vert;
 
     protected Face(Pane par) {
         this.pane = par;
@@ -43,6 +42,8 @@ public class Face {
         ike = 0;
         key = 0;
         connectIndex = 0;
+//        key = Math.random() * 1 - 0.5;
+
     }
 
     protected Pane getPane() {
@@ -94,7 +95,7 @@ public class Face {
             Point hold = new Point(i);
             points.add(hold);
 //            pane.getChildren().add(hold.getLabel());
-            pane.getChildren().add(hold.getBody());
+//            pane.getChildren().add(hold.getBody());
 //            hold.getLabel().setText("");
             hold.getBody().toFront();
 
@@ -106,17 +107,17 @@ public class Face {
 //        if (SHOW_MODEL) {
         body.setCenterX(position.x);
         body.setCenterY(position.y);
-        body.setRadius(radius);
+        body.setRadius(1.0);
         body.setFill(Color.CADETBLUE);
         body.setOpacity(0.1);
-//        pane.getChildren().add(body);
+        pane.getChildren().add(body);
 
         fake = new Circle();
         fake.setCenterX(position.x);
         fake.setCenterY(position.y);
         fake.setRadius(radius);
         fake.setFill(Color.web("#A63446"));
-        fake.setOpacity(0.5);
+        fake.setOpacity(0.3);
         pane.getChildren().add(fake);
         fake.toBack();
         fake.toBack();
@@ -135,9 +136,9 @@ public class Face {
             points.get(2).getBody().getCenterX(), points.get(2).getBody().getCenterY(),
             points.get(3).getBody().getCenterX(), points.get(3).getBody().getCenterY()
         });
-        face.setOpacity(0.1);
-        face.setStroke(Color.web("#23CE6B"));
-        face.setStrokeWidth(0.0);
+        face.setOpacity(0.4);
+        face.setFill(Color.web("#F71735"));
+        face.setStrokeWidth(0.5);
         pane.getChildren().add(face);
         face.toFront();
     }
@@ -226,26 +227,26 @@ public class Face {
         sides.add(test);
     }
 
-    private void updateBind(Point a, Point c) {
+    protected void bind(Circle a, Circle c) {
         Pane parent = pane;
         Line body = new Line();
         body.setStrokeWidth(1.0);
         body.startXProperty().bind(Bindings.createDoubleBinding(() -> {
-            Bounds b = a.getBody().getBoundsInParent();
+            Bounds b = a.getBoundsInParent();
             return b.getMinX() + b.getWidth() / 2;
-        }, a.getBody().boundsInParentProperty()));
+        }, a.boundsInParentProperty()));
         body.endXProperty().bind(Bindings.createDoubleBinding(() -> {
-            Bounds b = c.getBody().getBoundsInParent();
+            Bounds b = c.getBoundsInParent();
             return b.getMinX() + b.getWidth() / 2;
-        }, c.getBody().boundsInParentProperty()));
+        }, c.boundsInParentProperty()));
         body.startYProperty().bind(Bindings.createDoubleBinding(() -> {
-            Bounds b = a.getBody().getBoundsInParent();
+            Bounds b = a.getBoundsInParent();
             return b.getMinY() + b.getWidth() / 2;
-        }, a.getBody().boundsInParentProperty()));
+        }, a.boundsInParentProperty()));
         body.endYProperty().bind(Bindings.createDoubleBinding(() -> {
-            Bounds b = c.getBody().getBoundsInParent();
+            Bounds b = c.getBoundsInParent();
             return b.getMinY() + b.getWidth() / 2;
-        }, c.getBody().boundsInParentProperty()));
+        }, c.boundsInParentProperty()));
         parent.getChildren().add(body);
         body.toFront();
     }
@@ -264,7 +265,7 @@ public class Face {
             add *= -1;
         }
         if (points.get(0).getPosition() != null && fake != null && position != null) {
-           fake.setRadius(points.get(0).getPosition().distance(position)-6.0);
+            fake.setRadius(points.get(0).getPosition().distance(position) - 6.0);
         }
     }
 
@@ -277,20 +278,6 @@ public class Face {
             done = angle + 360;
         }
         return done;
-    }
-
-    private void addShape(Point a, Point b, Point c, Point d) {
-        Polygon hold = new Polygon();
-        hold.getPoints().addAll(new Double[]{
-            a.getBody().getCenterX(), a.getBody().getCenterY(),
-            b.getBody().getCenterX(), b.getBody().getCenterY(),
-            b.getBody().getCenterX(), b.getBody().getCenterY(),
-            b.getBody().getCenterX(), b.getBody().getCenterY()
-        });
-        face.setOpacity(0.0);
-        face.setFill(Color.rgb((150), (int) (Math.random() * 255), 150));
-        pane.getChildren().add(face);
-        face.toFront();
     }
 
     private void updateSides() {

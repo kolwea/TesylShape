@@ -54,62 +54,19 @@ public class Shape {
             Face hold = new Face(pane);
             faces.add(hold);
         }
-        faces.get(0).connect(faces.get(2));
-        faces.get(0).connect(faces.get(2));
-//        faces.get(0).connect(faces.get(0));
-//        faces.get(0).connect(faces.get(0));
+
 
         faces.get(0).connect(faces.get(1));
         faces.get(0).connect(faces.get(1));
         faces.get(0).connect(faces.get(1));
         faces.get(0).connect(faces.get(1));
 
-        faces.get(1).connect(faces.get(2));
-        faces.get(1).connect(faces.get(2));
-        faces.get(1).connect(faces.get(2));
-        faces.get(1).connect(faces.get(2));
+//        faces.get(2).connect(faces.get(1));
+//        faces.get(2).connect(faces.get(1));
+//        faces.get(2).connect(faces.get(1));
+//        faces.get(2).connect(faces.get(1));
 
-        faces.get(0).connect(faces.get(2));
-        faces.get(0).connect(faces.get(2));
-        faces.get(0).connect(faces.get(2));
-        faces.get(0).connect(faces.get(2));
-        
-        faces.get(0).connect(faces.get(2));
-        faces.get(0).connect(faces.get(2));
-//        faces.get(2).connect(faces.get(2));
-//        faces.get(2).connect(faces.get(2));
 
-//        faces.get(2).connect(faces.get(1));
-//        faces.get(2).connect(faces.get(1));
-//        faces.get(2).connect(faces.get(1));
-//        faces.get(2).connect(faces.get(1));
-//
-//        faces.get(3).connect(faces.get(0));
-//        faces.get(3).connect(faces.get(0));
-//        faces.get(3).connect(faces.get(0));
-//        faces.get(3).connect(faces.get(0));
-//
-//        faces.get(1).connect(faces.get(2));
-//        faces.get(1).connect(faces.get(2));
-//        faces.get(1).connect(faces.get(2));
-//        faces.get(1).connect(faces.get(2));
-//
-//        faces.get(3).connect(faces.get(2));
-//        faces.get(3).connect(faces.get(2));
-//        faces.get(3).connect(faces.get(2));
-//        faces.get(3).connect(faces.get(2));
-//        faces.get(0).connect(faces.get(1));
-//        faces.get(1).connect(faces.get(2));
-//        faces.get(2).connect(faces.get(1));
-//        faces.get(3).connect(faces.get(2));
-//        faces.get(0).connect(faces.get(1));
-//        faces.get(1).connect(faces.get(2));
-//        faces.get(2).connect(faces.get(1));
-//        faces.get(3).connect(faces.get(2));
-//        faces.get(0).connect(faces.get(1));
-//        faces.get(1).connect(faces.get(2));
-//        faces.get(2).connect(faces.get(1));
-//        faces.get(3).connect(faces.get(2));
     }
 
     private void setupBounds() {

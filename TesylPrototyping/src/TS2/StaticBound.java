@@ -142,6 +142,7 @@ public class StaticBound extends Bound {
 
     @Override
     protected void update() {
+        
     }
 
 }
