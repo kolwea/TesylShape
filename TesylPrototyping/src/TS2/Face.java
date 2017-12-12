@@ -66,8 +66,8 @@ public class Face {
         updateModel();
         updateShape();
         updateSides();
-        if (ike % 100000 == 0) {
-            key = Math.random() * 10 - 5;
+        if (ike % 200 == 0) {
+            key = Math.random() * 3 - 1.5;
         }
         rotation = noramlize(rotation);
         rotation += key;
@@ -136,9 +136,9 @@ public class Face {
             points.get(2).getBody().getCenterX(), points.get(2).getBody().getCenterY(),
             points.get(3).getBody().getCenterX(), points.get(3).getBody().getCenterY()
         });
-        face.setOpacity(0.6);
-        face.setFill(Color.web("#23CE6B"));
-        face.setStrokeWidth(1);
+        face.setOpacity(0.4);
+        face.setFill(Color.web("#F71735"));
+        face.setStrokeWidth(0.5);
         pane.getChildren().add(face);
         face.toFront();
     }

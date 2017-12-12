@@ -54,19 +54,18 @@ public class Shape {
             Face hold = new Face(pane);
             faces.add(hold);
         }
-//        Face test = faces.get(2);
-//        test.bind(test.body, test.points.get(0).getBody());
-//        test.bind(test.body, test.points.get(1).getBody());
-//        test.bind(test.body, test.points.get(2).getBody());
-//        test.bind(test.body, test.points.get(3).getBody());
+
 
         faces.get(0).connect(faces.get(1));
-        faces.get(1).connect(faces.get(2));
-        faces.get(2).connect(faces.get(0));
+        faces.get(0).connect(faces.get(1));
+        faces.get(0).connect(faces.get(1));
+        faces.get(0).connect(faces.get(1));
 
-        faces.get(2).connect(faces.get(0));
-        faces.get(1).connect(faces.get(2));
-        faces.get(0).connect(faces.get(2));
+//        faces.get(2).connect(faces.get(1));
+//        faces.get(2).connect(faces.get(1));
+//        faces.get(2).connect(faces.get(1));
+//        faces.get(2).connect(faces.get(1));
+
 
     }
 
